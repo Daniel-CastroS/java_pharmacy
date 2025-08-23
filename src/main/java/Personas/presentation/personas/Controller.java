@@ -37,9 +37,4 @@ public class Controller {
         a.setId(id);
         model.setCurrent(Service.instance().readAdministrador(a));
     }
-
-    public  void create(Persona p) throws Exception {
-        Service.instance().create(p);
-    }
-
 }
