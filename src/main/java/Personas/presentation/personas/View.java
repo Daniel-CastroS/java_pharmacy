@@ -14,6 +14,7 @@ public class View {
     private JTextField textField1;
     private JButton buscarButton;
     private JButton reporteButton;
+    private JTable table1;
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
