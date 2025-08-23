@@ -18,6 +18,7 @@ public class Data {
         pacientes = new ArrayList<>();
         administradores = new ArrayList<>();
         farmaceutas = new ArrayList<>();
+        administradores.add(new Administrador("111", "Admin1")); // Default admin
     }
 
     public List<Paciente> getPacientes() {
@@ -35,5 +36,4 @@ public class Data {
     public List<Administrador> getAdministradores() {
         return administradores;
     }
-
 }

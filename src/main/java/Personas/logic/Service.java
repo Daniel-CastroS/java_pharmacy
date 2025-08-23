@@ -3,11 +3,11 @@ package Personas.logic;
 import Personas.data.Data;
 
 public class Service {
-    private static Service instance;
+    private static Service theInstance;
 
-    public static Service getInstance() {
-        if (instance == null) instance = new Service();
-        return instance;
+    public static Service instance() {
+        if (theInstance == null) theInstance = new Service();
+        return theInstance;
     }
 
     private Data data;
@@ -27,7 +27,7 @@ public class Service {
         }
     }
 
-    public Medico readMedico(Medico m) throws Exception {
+    public Medico readMedico(Persona m) throws Exception {
         Medico result = data.getMedicos().stream()
                 .filter(i -> i.getId().equals(m.getId()))
                 .findFirst()
@@ -64,9 +64,9 @@ public class Service {
         }
     }
 
-    public Paciente readPaciente(String id) throws Exception {
+    public Paciente readPaciente(Persona p) throws Exception {
         Paciente result = data.getPacientes().stream()
-                .filter(i -> i.getId().equals(id))
+                .filter(i -> i.getId().equals(p.getId()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
@@ -101,9 +101,9 @@ public class Service {
         }
     }
 
-    public Farmaceuta readFarmaceuta(String id) throws Exception {
+    public Farmaceuta readFarmaceuta(Persona f) throws Exception {
         Farmaceuta result = data.getFarmaceutas().stream()
-                .filter(i -> i.getId().equals(id))
+                .filter(i -> i.getId().equals(f.getId()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
@@ -138,7 +138,7 @@ public class Service {
         }
     }
 
-    public Administrador readAdministrador(Administrador a) throws Exception {
+    public Administrador readAdministrador(Persona a) throws Exception {
         Administrador result = data.getAdministradores().stream()
                 .filter(i -> i.getId().equals(a.getId()))
                 .findFirst()
