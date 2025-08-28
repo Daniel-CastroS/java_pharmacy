@@ -1,5 +1,5 @@
 package Personas.logic;
-
+import java.util.List;
 import Personas.data.Data;
 
 public class Service {
@@ -49,6 +49,10 @@ public class Service {
         } else {
             throw new Exception("Medico no existe");
         }
+    }
+
+    public List<Medico> findAll() {
+        return data.getMedicos();
     }
 
     // =============== Paciente ===============

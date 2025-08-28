@@ -1,4 +1,4 @@
-package Personas.presentation.personas;
+package Personas.presentation.Medico;
 
 import Personas.logic.Persona;
 import Personas.logic.Service;
@@ -12,9 +12,11 @@ public class Controller {
         this.model = model;
         view.setController(this);
         view.setModel(model);
+
+
     }
 
-    public void readMedico(String id) throws Exception {
+   /* public void readMedico(String id) throws Exception {
         Persona m = new Persona();
         m.setId(id);
         model.setCurrent(Service.instance().readMedico(m));
@@ -37,4 +39,6 @@ public class Controller {
         a.setId(id);
         model.setCurrent(Service.instance().readAdministrador(a));
     }
+    */
+
 }

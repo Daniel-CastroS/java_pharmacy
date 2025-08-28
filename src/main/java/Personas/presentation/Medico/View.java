@@ -1,16 +1,16 @@
-package Personas.presentation.personas;
+package Personas.presentation.Medico;
 
 import javax.swing.*;
 
 public class View {
     private JPanel panel1;
-    private JTabbedPane tabbedPane1;
-    private JTextField textFieldId;
-    private JTextField textFieldNombre;
-    private JTextField textFieldEspecialidad;
     private JButton guardarButton;
     private JButton borrarButton;
     private JButton limpiarButton;
+    private JTextField textFieldId;
+    private JTextField textFieldNombre;
+    private JTextField textFieldEspecialidad;
+    private JTable table2;
     private JTextField textField1;
     private JButton buscarButton;
     private JButton reporteButton;
