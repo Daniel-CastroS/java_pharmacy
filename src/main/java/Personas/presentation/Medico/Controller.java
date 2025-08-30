@@ -3,6 +3,12 @@ package Personas.presentation.Medico;
 import Personas.logic.Persona;
 import Personas.logic.Service;
 
+
+
+import Personas.logic.Medico;
+import Personas.logic.Service;
+import java.util.List;
+
 public class Controller {
     View view;
     Model model;
@@ -12,33 +18,44 @@ public class Controller {
         this.model = model;
         view.setController(this);
         view.setModel(model);
-
-
     }
 
-   /* public void readMedico(String id) throws Exception {
-        Persona m = new Persona();
-        m.setId(id);
-        model.setCurrent(Service.instance().readMedico(m));
+    // ====== MÉTODOS CRUD ======
+
+    // Crear médico
+    public void createMedico(Medico m) throws Exception {
+        Service.instance().createMedico(m);
+        model.setCurrent(new Medico());
+        model.setList(Service.instance().findAll());
     }
 
-    public void readPaciente(String id) throws Exception {
-        Persona p = new Persona();
-        p.setId(id);
-        model.setCurrent(Service.instance().readPaciente(p));
+
+    public void readMedico(String id) throws Exception {
+        Medico temp = new Medico();
+        temp.setId(id);
+        try {
+            Medico result = Service.instance().readMedico(temp);
+            model.setCurrent(result);
+        } catch (Exception ex) {
+            model.setCurrent(new Medico());
+            throw ex;
+        }
     }
 
-    public void readFarmaceuta(String id) throws Exception {
-        Persona f = new Persona();
-        f.setId(id);
-        model.setCurrent(Service.instance().readFarmaceuta(f));
+    // Borrar médico
+    public void deleteMedico(String id) throws Exception {
+        Service.instance().deleteMedico(id);
+        model.setCurrent(new Medico());
+        model.setList(Service.instance().findAll());
     }
 
-    public void readAdministrativo(String id) throws Exception {
-        Persona a = new Persona();
-        a.setId(id);
-        model.setCurrent(Service.instance().readAdministrador(a));
+    // Limpiar formulario (reset current)
+    public void clear() {
+        model.setCurrent(new Medico());
     }
-    */
 
+    // Obtener listado completo
+    public List<Medico> getAll() {
+        return Service.instance().findAll();
+    }
 }
