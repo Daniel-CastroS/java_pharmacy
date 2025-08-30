@@ -1,4 +1,5 @@
 package Personas.presentation.Medico;
+import Personas.logic.Medico;
 
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
@@ -25,9 +26,118 @@ public class View implements PropertyChangeListener {
     private JButton reporteButton;
     private JTable table1;
 
+    Controller controller;
+    Model model;
+
+    public View() {
+
+        // BOTONES
+        guardarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (validateFields()) {
+                    Medico m = take();
+                    try {
+                        controller.createMedico(m);
+                        JOptionPane.showMessageDialog(panel1, "Médico registrado", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+
+        borrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.deleteMedico(textFieldId.getText());
+                    JOptionPane.showMessageDialog(panel1, "Médico eliminado", "Info", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        limpiarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                controller.clear();
+            }
+        });
+
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    controller.readMedico(textFieldId.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+    }
+
+    public JPanel getPanel() {
+        return panel1;
+    }
+
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
+        model.addPropertyChangeListener(this);
+    }
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        switch (evt.getPropertyName()) {
+            case Model.LIST:
+                int[] cols = {TableModel.ID, TableModel.NOMBRE, TableModel.ESPECIALIDAD};
+                table1.setModel(new TableModel(cols, model.getList()));
+                break;
+            case Model.CURRENT:
+                Medico current = model.getCurrent();
+                textFieldId.setText(current.getId());
+                textFieldNombre.setText(current.getName());
+                textFieldEspecialidad.setText(current.getEspecialidad());
+                // Reset visual
+                resetField(textFieldId);
+                resetField(textFieldNombre);
+                break;
+        }
+    }
 
+    private Medico take() {
+        Medico m = new Medico();
+        m.setId(textFieldId.getText());
+        m.setName(textFieldNombre.getText());
+        m.setEspecialidad(textFieldEspecialidad.getText());
+        return m;
+    }
+
+    private boolean validateFields() {
+        boolean valid = true;
+        if (textFieldId.getText().isEmpty()) {
+            valid = false;
+            textFieldId.setBackground(java.awt.Color.PINK);
+            textFieldId.setToolTipText("ID requerido");
+        } else resetField(textFieldId);
+
+        if (textFieldNombre.getText().isEmpty()) {
+            valid = false;
+            textFieldNombre.setBackground(java.awt.Color.PINK);
+            textFieldNombre.setToolTipText("Nombre requerido");
+        } else resetField(textFieldNombre);
+
+        return valid;
+    }
+
+    private void resetField(JTextField field) {
+        field.setBackground(null);
+        field.setToolTipText(null);
     }
 
 

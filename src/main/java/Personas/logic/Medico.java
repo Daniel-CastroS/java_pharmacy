@@ -16,7 +16,7 @@ public class Medico extends Trabajador{
         return especialidad;
     }
 
-    public void setEspeciality(String especialidad) {
+    public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
 }
