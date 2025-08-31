@@ -1,5 +1,6 @@
 package Personas.presentation.Farmaceuta;
 
+import Personas.Application;
 import Personas.logic.Farmaceuta;
 
 import javax.swing.*;
@@ -114,13 +115,13 @@ public class View implements PropertyChangeListener {
         boolean valid = true;
         if (textFieldId.getText().isEmpty()) {
             valid = false;
-            textFieldId.setBackground(java.awt.Color.PINK);
+            textFieldId.setBackground(Application.BACKGROUND_ERROR);
             textFieldId.setToolTipText("ID requerido");
         } else resetField(textFieldId);
 
         if (textFieldNombre.getText().isEmpty()) {
             valid = false;
-            textFieldNombre.setBackground(java.awt.Color.PINK);
+            textFieldNombre.setBackground(Application.BACKGROUND_ERROR);
             textFieldNombre.setToolTipText("Nombre requerido");
         } else resetField(textFieldNombre);
 
