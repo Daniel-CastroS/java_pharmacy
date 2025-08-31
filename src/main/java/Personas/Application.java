@@ -12,7 +12,7 @@ public class Application {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ex) {
-            ex.printStackTrace();
+
         }
 
         View view = new View();
