@@ -4,26 +4,42 @@ import Personas.presentation.Medico.Controller;
 import Personas.presentation.Medico.Model;
 import Personas.presentation.Medico.View;
 
+
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Application {
     public static void main(String[] args) {
+
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ex) {
-
+            ex.printStackTrace();
         }
 
-        View view = new View();
-        Model model = new Model();
-        Controller controller = new Controller(view, model);
 
-        JFrame window = new JFrame();
-        window.setSize(600,400);
+        //ESTO ES DE MEDICO
+        View medicoView = new View();
+        Model medicoModel = new Model();
+        Controller medicoController = new Controller(medicoView, medicoModel);
+
+       //ESTO ES DE FARMACEUTA, sin embargo no puedo hacer la implementacion porque por algun no motivo no me deja hacer el puto import de Farmaceutas
+        Personas.presentation.Farmaceuta.View farmView = new Personas.presentation.Farmaceuta.View();
+        Personas.presentation.Farmaceuta.Model farmModel = new Personas.presentation.Farmaceuta.Model();
+        Personas.presentation.Farmaceuta.Controller farmController = new Personas.presentation.Farmaceuta.Controller(farmView, farmModel);
+
+
+        JFrame window = new JFrame("Gestión de Personal");
+        window.setSize(800, 600);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setTitle("Gestión de Médicos");
-        window.setContentPane(view.getPanel());
+
+        // ---PESTANAS
+        JTabbedPane tabs = new JTabbedPane();
+        tabs.addTab("Médicos", medicoView.getPanel());
+        tabs.addTab("Farmaceutas", farmView.getPanel());
+
+        window.setContentPane(tabs);
         window.setVisible(true);
     }
 

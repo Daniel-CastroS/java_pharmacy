@@ -27,7 +27,7 @@ public class Service {
         }
     }
 
-    public Medico readMedico(Persona m) throws Exception {
+    public Medico readMedico(Medico m) throws Exception {
         Medico result = data.getMedicos().stream()
                 .filter(i -> i.getId().equals(m.getId()))
                 .findFirst()
@@ -128,7 +128,9 @@ public class Service {
             throw new Exception("Farmaceuta no existe");
         }
     }
-
+    public List<Farmaceuta> findAllFarmaceutas() {
+        return data.getFarmaceutas();
+    }
     // =============== Administrador ===============
     public void createAdministrador(Administrador a) throws Exception {
         Administrador result = data.getAdministradores().stream()
