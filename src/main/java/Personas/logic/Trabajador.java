@@ -10,7 +10,7 @@ public class Trabajador extends Persona{
 
     public Trabajador() {
         super();
-        this.clave_sistema = " ";
+        this.clave_sistema = "";
     }
 
     public String getClave_sistema() {

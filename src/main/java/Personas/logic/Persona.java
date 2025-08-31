@@ -9,8 +9,8 @@ public class Persona {
         this.name = name;
     }
     public Persona() {
-        this.id = " ";
-        this.name = " ";
+        this.id = "";
+        this.name = "";
     }
 
     public String getId() {

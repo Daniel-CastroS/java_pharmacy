@@ -19,6 +19,11 @@ public class Data {
         administradores = new ArrayList<>();
         farmaceutas = new ArrayList<>();
         administradores.add(new Administrador("111", "Admin1")); // Default admin
+
+
+
+        medicos.add(new Medico("001", "Dr. Juan", "Cardiología"));
+        medicos.add(new Medico("002", "Dra. María", "Pediatría"));
     }
 
     public List<Paciente> getPacientes() {

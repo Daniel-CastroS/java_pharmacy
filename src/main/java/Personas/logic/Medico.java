@@ -9,7 +9,7 @@ public class Medico extends Trabajador{
     }
     public Medico() {
         super();
-        this.especialidad = " ";
+        this.especialidad = "";
     }
 
     public String getEspecialidad() {
