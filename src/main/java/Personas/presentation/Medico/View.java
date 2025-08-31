@@ -1,4 +1,5 @@
 package Personas.presentation.Medico;
+import Personas.Application;
 import Personas.logic.Medico;
 
 import javax.swing.*;
@@ -20,7 +21,6 @@ public class View implements PropertyChangeListener {
     private JTextField textFieldId;
     private JTextField textFieldNombre;
     private JTextField textFieldEspecialidad;
-    private JTable table2;
     private JTextField textField1;
     private JButton buscarButton;
     private JButton reporteButton;
@@ -78,9 +78,12 @@ public class View implements PropertyChangeListener {
         });
     }
 
+
+
     public JPanel getPanel() {
         return panel1;
     }
+
 
     public void setController(Controller controller) {
         this.controller = controller;
@@ -122,15 +125,32 @@ public class View implements PropertyChangeListener {
         boolean valid = true;
         if (textFieldId.getText().isEmpty()) {
             valid = false;
-            textFieldId.setBackground(java.awt.Color.PINK);
+            textFieldId.setBackground(Application.BACKGROUND_ERROR);
             textFieldId.setToolTipText("ID requerido");
-        } else resetField(textFieldId);
+        } else {
+            textFieldId.setBorder(null);
+            textFieldId.setToolTipText(null);
+        }
 
         if (textFieldNombre.getText().isEmpty()) {
             valid = false;
-            textFieldNombre.setBackground(java.awt.Color.PINK);
+            textFieldNombre.setBackground(Application.BACKGROUND_ERROR);
             textFieldNombre.setToolTipText("Nombre requerido");
-        } else resetField(textFieldNombre);
+        } //else resetField(textFieldNombre);
+        else {
+            textFieldId.setBorder(null);
+            textFieldId.setToolTipText(null);
+        }
+        if (textFieldEspecialidad.getText().isEmpty()) {
+            valid = false;
+            textFieldEspecialidad.setBackground(Application.BACKGROUND_ERROR);
+            textFieldEspecialidad.setToolTipText("Especialidad requerida");
+        } //else resetField(textFieldEspecialidad);
+        else {
+            textFieldId.setBorder(null);
+            textFieldId.setToolTipText(null);
+
+        }
 
         return valid;
     }

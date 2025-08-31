@@ -43,5 +43,5 @@ public class Application {
         window.setVisible(true);
     }
 
-    public static final Color BACKGROUND_ERROR = new Color(209, 102, 255, 255);
+    public static final Color BACKGROUND_ERROR = new Color(255, 102, 102, 255);
 }

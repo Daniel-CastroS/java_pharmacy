@@ -16,7 +16,6 @@ public class View implements PropertyChangeListener {
     private JButton limpiarButton;
     private JTextField textFieldId;
     private JTextField textFieldNombre;
-    private JTable table2;
     private JTextField textField1;
     private JButton buscarButton;
     private JButton reporteButton;
