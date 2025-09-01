@@ -1,10 +1,10 @@
 package Personas.presentation.Farmaceuta;
 
+import Personas.Application;
 import Personas.logic.Farmaceuta;
 import Personas.presentation.AbstractModel;
 
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Model extends AbstractModel {
@@ -12,14 +12,27 @@ public class Model extends AbstractModel {
     private Farmaceuta current;
     private List<Farmaceuta> list;
     private Farmaceuta filter;  // ignorar por ahora
+    int mode;
 
     public static final String LIST = "list";
     public static final String CURRENT = "current";
     public static final String FILTER = "filter"; // ignorar por ahora
 
-    public Model() {
-        this.list = new ArrayList<>();
-        current = new Farmaceuta();
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        super.addPropertyChangeListener(listener);
+        firePropertyChange(LIST);
+        firePropertyChange(CURRENT);
+        firePropertyChange(FILTER);
+    }
+
+    public Model() { }
+
+    public void init(List<Farmaceuta> list) {
+        this.list = list;
+        this.current = new Farmaceuta();
+        this.filter = new Farmaceuta();
+        this.mode = Application.MODE_CREATE;
     }
 
     // GETTERS Y SETTERS
@@ -44,11 +57,7 @@ public class Model extends AbstractModel {
         firePropertyChange(FILTER);
     }
 
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        super.addPropertyChangeListener(listener);
-        firePropertyChange(LIST);
-        firePropertyChange(CURRENT);
-        firePropertyChange(FILTER);
-    }
+    public int getMode() { return mode; }
+
+    public void setMode(int mode) { this.mode = mode; }
 }

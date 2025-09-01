@@ -116,6 +116,7 @@ public class Service {
     }
 
     // =============== Farmaceuta ===============
+    // =============== Farmaceuta ===============
     public void createFarmaceuta(Farmaceuta f) throws Exception {
         Farmaceuta result = data.getFarmaceutas().stream()
                 .filter(i -> i.getId().equals(f.getId()))
@@ -128,7 +129,7 @@ public class Service {
         }
     }
 
-    public Farmaceuta readFarmaceuta(Persona f) throws Exception {
+    public Farmaceuta readFarmaceuta(Farmaceuta f) throws Exception {
         Farmaceuta result = data.getFarmaceutas().stream()
                 .filter(i -> i.getId().equals(f.getId()))
                 .findFirst()
@@ -140,20 +141,32 @@ public class Service {
         }
     }
 
-    public void deleteFarmaceuta(String id) throws Exception {
-        Farmaceuta result = data.getFarmaceutas().stream()
-                .filter(i -> i.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
+    public void updateFarmaceuta(Farmaceuta f) throws Exception {
+        Farmaceuta result;
+        try {
+            result = this.readFarmaceuta(f);
             data.getFarmaceutas().remove(result);
-        } else {
+            data.getFarmaceutas().add(f);
+        } catch (Exception e) {
             throw new Exception("Farmaceuta no existe");
         }
     }
+
+    public void deleteFarmaceuta(Farmaceuta f) throws Exception {
+        data.getFarmaceutas().remove(f);
+    }
+
+    public List<Farmaceuta> search(Farmaceuta f) {
+        return data.getFarmaceutas().stream()
+                .filter(i -> i.getName().contains(f.getName()) || i.getId().contains(f.getId()))
+                .sorted(Comparator.comparing(Farmaceuta::getName))
+                .collect(Collectors.toList());
+    }
+
     public List<Farmaceuta> findAllFarmaceutas() {
         return data.getFarmaceutas();
     }
+
     // =============== Administrador ===============
     public void createAdministrador(Administrador a) throws Exception {
         Administrador result = data.getAdministradores().stream()

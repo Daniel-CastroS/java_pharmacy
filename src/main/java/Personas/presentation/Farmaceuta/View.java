@@ -2,12 +2,15 @@ package Personas.presentation.Farmaceuta;
 
 import Personas.Application;
 import Personas.logic.Farmaceuta;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.table.TableColumnModel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class View implements PropertyChangeListener {
     private JPanel panel1;
@@ -16,7 +19,7 @@ public class View implements PropertyChangeListener {
     private JButton limpiarButton;
     private JTextField textFieldId;
     private JTextField textFieldNombre;
-    private JTextField textField1;
+    private JTextField textField1;  // campo de búsqueda
     private JButton buscarButton;
     private JButton reporteButton;
     private JTable table1;
@@ -25,14 +28,29 @@ public class View implements PropertyChangeListener {
     Model model;
 
     public View() {
-        // BOTONES
+        // BOTÓN BUSCAR
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Farmaceuta filter = new Farmaceuta();
+                    filter.setId(textField1.getText());
+                    filter.setName(textField1.getText());
+                    controller.search(filter);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        // BOTÓN GUARDAR
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (validateFields()) {
                     Farmaceuta f = take();
                     try {
-                        controller.createFarmaceuta(f);
+                        controller.save(f);
                         JOptionPane.showMessageDialog(panel1, "Farmacéutico registrado", "Info", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -40,12 +58,22 @@ public class View implements PropertyChangeListener {
                 }
             }
         });
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table1.getSelectedRow();
+                if (row != -1) {
+                    controller.edit(row);  // Llama al método edit del controller
+                }
+            }
+        });
 
+        // BOTÓN BORRAR
         borrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.deleteFarmaceuta(textFieldId.getText());
+                    controller.deleteFarmaceuta();
                     JOptionPane.showMessageDialog(panel1, "Farmacéutico eliminado", "Info", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -53,24 +81,16 @@ public class View implements PropertyChangeListener {
             }
         });
 
+        // BOTÓN LIMPIAR
         limpiarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controller.clear();
             }
         });
-
-        buscarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controller.readFarmaceuta(textField1.getText());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
     }
+
+
 
     public JPanel getPanel() {
         return panel1;
@@ -91,16 +111,38 @@ public class View implements PropertyChangeListener {
             case Model.LIST:
                 int[] cols = {TableModel.ID, TableModel.NOMBRE};
                 table1.setModel(new TableModel(cols, model.getList()));
+                table1.setRowHeight(30);
+                TableColumnModel columnModel = table1.getColumnModel();
+                columnModel.getColumn(0).setPreferredWidth(150);
+                columnModel.getColumn(1).setPreferredWidth(200);
                 break;
+
             case Model.CURRENT:
                 Farmaceuta current = model.getCurrent();
                 textFieldId.setText(current.getId());
                 textFieldNombre.setText(current.getName());
-                // Reset visual
+
+                // habilitar/deshabilitar según modo
+                if (model.getMode() == Application.MODE_EDIT) {
+                    textFieldId.setEnabled(false);
+                    borrarButton.setEnabled(true);
+                } else {
+                    textFieldId.setEnabled(true);
+                    borrarButton.setEnabled(false);
+                }
+
+                // reset visual
                 resetField(textFieldId);
                 resetField(textFieldNombre);
                 break;
+
+            case Model.FILTER:
+                textField1.setText(model.getFilter().getId());
+               // textField1.setText(model.getFilter().getName());
+                break;
         }
+
+        this.panel1.revalidate();
     }
 
     private Farmaceuta take() {

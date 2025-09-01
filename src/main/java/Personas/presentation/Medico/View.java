@@ -15,6 +15,11 @@ import java.beans.PropertyChangeListener;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
 public class View implements PropertyChangeListener {
     private JPanel panel1;
     private JButton guardarButton;
@@ -63,6 +68,16 @@ public class View implements PropertyChangeListener {
                 }
             }
         });
+        table1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table1.getSelectedRow();
+                if (row != -1) { // Si se seleccionó una fila
+                    controller.edit(row);
+                }
+            }
+        });
+
 
 
 
@@ -149,13 +164,6 @@ public class View implements PropertyChangeListener {
 
         this.panel1.revalidate();
     }
-
-
-
-
-
-
-
 
 
     private Medico take() {
