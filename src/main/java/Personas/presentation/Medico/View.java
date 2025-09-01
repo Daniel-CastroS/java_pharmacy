@@ -142,6 +142,8 @@ public class View implements PropertyChangeListener {
 
             case Model.FILTER:
                 textField1.setText(model.getFilter().getId());
+                textField1.setText(model.getFilter().getName());
+
                 break;
         }
 
