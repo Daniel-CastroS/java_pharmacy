@@ -1,7 +1,7 @@
 package Personas.presentation.Medico;
 import Personas.Application;
 import Personas.logic.Medico;
-
+import Personas.presentation.AbstractTableModel;
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
@@ -12,6 +12,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableColumnModel;
 
 public class View implements PropertyChangeListener {
     private JPanel panel1;
@@ -31,6 +33,21 @@ public class View implements PropertyChangeListener {
 
     public View() {
 
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Medico filter = new Medico();
+                    filter.setId(textField1.getText());
+                    filter.setName(textField1.getText());
+                    controller.search(filter);
+
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
         // BOTONES
         guardarButton.addActionListener(new ActionListener() {
             @Override
@@ -38,7 +55,7 @@ public class View implements PropertyChangeListener {
                 if (validateFields()) {
                     Medico m = take();
                     try {
-                        controller.createMedico(m);
+                        controller.save(m);
                         JOptionPane.showMessageDialog(panel1, "Médico registrado", "Info", JOptionPane.INFORMATION_MESSAGE);
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -47,11 +64,13 @@ public class View implements PropertyChangeListener {
             }
         });
 
+
+
         borrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.deleteMedico(textFieldId.getText());
+                    controller.deleteMedico();
                     JOptionPane.showMessageDialog(panel1, "Médico eliminado", "Info", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -66,16 +85,7 @@ public class View implements PropertyChangeListener {
             }
         });
 
-        buscarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    controller.readMedico(textField1.getText());
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(panel1, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
-            }
-        });
+
     }
 
 
@@ -94,24 +104,57 @@ public class View implements PropertyChangeListener {
         model.addPropertyChangeListener(this);
     }
 
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         switch (evt.getPropertyName()) {
             case Model.LIST:
                 int[] cols = {TableModel.ID, TableModel.NOMBRE, TableModel.ESPECIALIDAD};
                 table1.setModel(new TableModel(cols, model.getList()));
+                table1.setRowHeight(30);
+                TableColumnModel columnModel = table1.getColumnModel();
+                columnModel.getColumn(0).setPreferredWidth(150);
+                columnModel.getColumn(1).setPreferredWidth(150);
+                columnModel.getColumn(2).setPreferredWidth(200);
                 break;
+
             case Model.CURRENT:
                 Medico current = model.getCurrent();
                 textFieldId.setText(current.getId());
                 textFieldNombre.setText(current.getName());
                 textFieldEspecialidad.setText(current.getEspecialidad());
-                // Reset visual
+
+                // habilitar/deshabilitar según modo
+                if (model.getMode() == Personas.Application.MODE_EDIT) {
+                    textFieldId.setEnabled(false);
+                    borrarButton.setEnabled(true);
+
+                } else {
+                    textFieldId.setEnabled(true);
+                    borrarButton.setEnabled(false);
+                }
+
+                // reset visual
                 resetField(textFieldId);
                 resetField(textFieldNombre);
+                resetField(textFieldEspecialidad);
+                break;
+
+            case Model.FILTER:
+                textField1.setText(model.getFilter().getId());
                 break;
         }
+
+        this.panel1.revalidate();
     }
+
+
+
+
+
+
+
+
 
     private Medico take() {
         Medico m = new Medico();

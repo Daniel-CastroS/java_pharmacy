@@ -1,5 +1,5 @@
 package Personas.presentation.Medico;
-
+import Personas.Application;
 import Personas.logic.Medico;
 import Personas.presentation.AbstractModel;
 
@@ -19,22 +19,29 @@ public class Model extends AbstractModel {
     private Medico current;
     private List<Medico> list;
     private Medico filter;  //ignorar por ahora
+    int mode;
 
-
-    public static final String LIST = "list";
-    public static final String CURRENT = "current";
-    public static final String FILTER = "filter";//ignorar por ahora
-
-    public Model() {
-        this.list = new ArrayList<>();
-        current = new Medico();
+    @Override
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        super.addPropertyChangeListener(listener);
+        firePropertyChange(LIST);
+        firePropertyChange(CURRENT);
+        firePropertyChange(FILTER);
     }
 
-   /* public void init(List<Medico> list) {
+
+
+
+    public Model() {
+
+    }
+
+    public void init(List<Medico> list) {
         this.list = list;
         this.current = new Medico();
         this.filter = new Medico();
-    }*/// por ahora no se usa
+        this.mode = Application.MODE_CREATE;
+    }
 
     // GETTERS Y SETTERS
     public List<Medico> getList() { return list; }
@@ -59,12 +66,17 @@ public class Model extends AbstractModel {
         this.filter = filter;
         firePropertyChange(FILTER);
     }
-
-    @Override
-    public void addPropertyChangeListener(PropertyChangeListener listener) {
-        super.addPropertyChangeListener(listener);
-        firePropertyChange(LIST);
-        firePropertyChange(CURRENT);
-        firePropertyChange(FILTER);
+    public int getMode() {
+        return mode;
     }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+
+
+    public static final String LIST = "list";
+    public static final String CURRENT = "current";
+    public static final String FILTER = "filter";//ignorar por ahora
 }

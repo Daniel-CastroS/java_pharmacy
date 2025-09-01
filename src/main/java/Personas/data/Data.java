@@ -22,8 +22,7 @@ public class Data {
 
 
 
-        medicos.add(new Medico("001", "Dr. Juan", "Cardiología"));
-        medicos.add(new Medico("002", "Dra. María", "Pediatría"));
+
     }
 
     public List<Paciente> getPacientes() {

@@ -1,5 +1,8 @@
 package Personas.logic;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import Personas.data.Data;
 
 public class Service {
@@ -12,14 +15,14 @@ public class Service {
 
     private Data data;
 
+    public Data getData() {return data;}
+
+
     private Service() { data = new Data(); }
 
     // =============== Medico ===============
     public void createMedico(Medico m) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(m.getId()))
-                .findFirst()
-                .orElse(null);
+        Medico result = data.getMedicos().stream().filter(i -> i.getId().equals(m.getId())).findFirst().orElse(null);
         if (result == null) {
             data.getMedicos().add(m);
         } else {
@@ -28,18 +31,14 @@ public class Service {
     }
 
     public Medico readMedico(Medico m) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(m.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
-            return result;
-        } else {
+        Medico result = data.getMedicos().stream().filter(i -> i.getId().equals(m.getId())).findFirst().orElse(null);
+        if (result != null) {return result;}
+        else {
             throw new Exception("Medico no existe");
         }
     }
 
-    public void deleteMedico(String id) throws Exception {
+   /* public void deleteMedico(String id) throws Exception {
         Medico result = data.getMedicos().stream()
                 .filter(i -> i.getId().equals(id))
                 .findFirst()
@@ -49,11 +48,35 @@ public class Service {
         } else {
             throw new Exception("Medico no existe");
         }
+    }*/
+    public void updateMedico(Medico m) throws Exception {
+        Medico result;
+        try{
+            result = this.readMedico(m);
+            data.getMedicos().remove(result);
+            data.getMedicos().add(m);
+        } catch (Exception e){
+            throw new Exception("Medico no existe");
+        }
+
     }
+
+    public void deleteMedico(Medico m) throws Exception {
+        data.getMedicos().remove(m);
+    }
+    public List<Medico> search(Medico m){
+        return data.getMedicos().stream()
+                .filter(i->i.getName().contains(m.getName()) || i.getId().contains(m.getId()))
+                .sorted(Comparator.comparing(Medico::getName))
+                .collect(Collectors.toList());
+    }
+
+
 
     public List<Medico> findAll() {
         return data.getMedicos();
     }
+
 
     // =============== Paciente ===============
     public void createPaciente(Paciente p) throws Exception {
