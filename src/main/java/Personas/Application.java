@@ -42,6 +42,8 @@ public class Application {
         window.setContentPane(tabs);
         window.setVisible(true);
     }
+    public final static int MODE_CREATE=1;
+    public final static int MODE_EDIT=2;
 
     public static final Color BACKGROUND_ERROR = new Color(255, 102, 102, 255);
 }
