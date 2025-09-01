@@ -1,21 +1,16 @@
-package Personas.presentation.Medico;
+package Personas.presentation.Paciente;
 
 import Personas.Application;
-import Personas.logic.Medico;
-import Personas.presentation.AbstractModel;
-import java.beans.PropertyChangeListener;
-import Personas.logic.Persona;
-import Personas.logic.Medico;
+import Personas.logic.Paciente;
 import Personas.presentation.AbstractModel;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Model extends AbstractModel {
-
-    private Medico current;
-    private List<Medico> list;
-    private Medico filter;  //ignorar por ahora
+public class Model extends AbstractModel{
+    private Paciente current;
+    private List<Paciente> list;
+    private Paciente filter;  //ignorar por ahora
     int mode;
 
     @Override
@@ -30,36 +25,37 @@ public class Model extends AbstractModel {
 
     }
 
-    public void init(List<Medico> list) {
+    public void init(List<Paciente> list) {
         this.list = list;
-        this.current = new Medico();
-        this.filter = new Medico();
+        this.current = new Paciente();
+        this.filter = new Paciente();
         this.mode = Application.MODE_CREATE;
     }
 
     // GETTERS Y SETTERS
-    public List<Medico> getList() { return list; }
+    public List<Paciente> getList() { return list; }
 
-    public void setList(List<Medico> list) {
+    public void setList(List<Paciente> list) {
         this.list = list;
         firePropertyChange(LIST);
     }
 
 
-    public Medico getCurrent() { return current; }
+    public Paciente getCurrent() { return current; }
 
 
-    public void setCurrent(Medico current) {
+    public void setCurrent(Paciente current) {
         this.current = current;
         firePropertyChange(CURRENT);
     }
 
-    public Medico getFilter() { return filter; }
+    public Paciente getFilter() { return filter; }
 
-    public void setFilter(Medico filter) {
+    public void setFilter(Paciente filter) {
         this.filter = filter;
         firePropertyChange(FILTER);
     }
+
     public int getMode() {
         return mode;
     }

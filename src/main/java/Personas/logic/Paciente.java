@@ -1,26 +1,26 @@
 package Personas.logic;
 
 public class Paciente extends Persona{
-    private int telefono;
+    private String telefono;
     private String fechaNac;
 
-    public Paciente(String id, String name, int numero, String fechaNac) {
+    public Paciente(String id, String name, String numero, String fechaNac) {
         super(id, name);
         this.telefono = numero;
         this.fechaNac = fechaNac;
     }
     public Paciente() {
         super();
-        this.telefono = 0;
+        this.telefono = " ";
         this.fechaNac = " ";
     }
 
-    public int getTelefono() {
+    public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(int telephone) {
-        this.telefono = telefono;
+    public void setTelefono(String telephone) {
+        this.telefono = telephone;
     }
 
     public String getFechaNac() {

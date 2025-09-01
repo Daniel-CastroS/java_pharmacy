@@ -71,15 +71,12 @@ public class Service {
                 .collect(Collectors.toList());
     }
 
-
-
     public List<Medico> findAll() {
         return data.getMedicos();
     }
 
-
     // =============== Paciente ===============
-    public void createPaciente(Paciente p) throws Exception {
+    public void createPatiente(Paciente p) throws Exception {
         Paciente result = data.getPacientes().stream()
                 .filter(i -> i.getId().equals(p.getId()))
                 .findFirst()
@@ -103,9 +100,9 @@ public class Service {
         }
     }
 
-    public void deletePaciente(String id) throws Exception {
+    public void deletePaciente(Paciente p) throws Exception {
         Paciente result = data.getPacientes().stream()
-                .filter(i -> i.getId().equals(id))
+                .filter(i -> i.getId().equals(p.getId()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
@@ -115,7 +112,28 @@ public class Service {
         }
     }
 
-    // =============== Farmaceuta ===============
+    public void updatePaciente(Paciente p) throws Exception {
+        Paciente result;
+        try {
+            result = this.readPaciente(p);
+            data.getPacientes().remove(result);
+            data.getPacientes().add(p);
+        } catch (Exception e) {
+            throw new Exception("Paciente no existe");
+        }
+    }
+
+    public List<Paciente> search(Paciente p) {
+        return data.getPacientes().stream()
+                .filter(i -> i.getName().contains(p.getName()) || i.getId().contains(p.getId()))
+                .sorted(Comparator.comparing(Paciente::getName))
+                .collect(Collectors.toList());
+    }
+
+    public List<Paciente> findAllPacientes() {
+        return data.getPacientes();
+    }
+
     // =============== Farmaceuta ===============
     public void createFarmaceuta(Farmaceuta f) throws Exception {
         Farmaceuta result = data.getFarmaceutas().stream()

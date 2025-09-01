@@ -1,5 +1,6 @@
 package Personas;
 
+import Personas.logic.Persona;
 import Personas.presentation.Medico.Controller;
 import Personas.presentation.Medico.Model;
 import Personas.presentation.Medico.View;
@@ -34,10 +35,20 @@ public class Application {
         window.setSize(800, 600);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        //ESTO ES DE PACIENTE
+        Personas.presentation.Paciente.View pacienteView = new Personas.presentation.Paciente.View();
+        Personas.presentation.Paciente.Model pacienteModel = new Personas.presentation.Paciente.Model();
+        Personas.presentation.Paciente.Controller pacienteController = new Personas.presentation.Paciente.Controller(pacienteView, pacienteModel);
+
+        JFrame windowPaciente = new JFrame("Gestión de Pacientes");
+        windowPaciente.setSize(800, 600);
+        windowPaciente.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         // ---PESTANAS
         JTabbedPane tabs = new JTabbedPane();
         tabs.addTab("Médicos", medicoView.getPanel());
         tabs.addTab("Farmaceutas", farmView.getPanel());
+        tabs.addTab("Pacientes", pacienteView.getPanel());
 
         window.setContentPane(tabs);
         window.setVisible(true);

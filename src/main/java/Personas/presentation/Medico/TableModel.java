@@ -2,7 +2,6 @@ package Personas.presentation.Medico;
 
 import Personas.logic.Medico;
 import Personas.presentation.AbstractTableModel;
-
 import java.util.List;
 
 public class TableModel extends AbstractTableModel<Medico> implements javax.swing.table.TableModel {

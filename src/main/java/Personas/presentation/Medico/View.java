@@ -1,18 +1,12 @@
 package Personas.presentation.Medico;
 import Personas.Application;
 import Personas.logic.Medico;
-import Personas.presentation.AbstractTableModel;
+
 import javax.swing.*;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumnModel;
 
 
@@ -28,10 +22,10 @@ public class View implements PropertyChangeListener {
     private JTextField textFieldId;
     private JTextField textFieldNombre;
     private JTextField textFieldEspecialidad;
-    private JTextField textField1;
+    private JTextField buscarTextField;
     private JButton buscarButton;
-    private JButton reporteButton;
     private JTable table1;
+    private JButton reporteButton;
 
     Controller controller;
     Model model;
@@ -43,8 +37,8 @@ public class View implements PropertyChangeListener {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Medico filter = new Medico();
-                    filter.setId(textField1.getText());
-                    filter.setName(textField1.getText());
+                    filter.setId(buscarTextField.getText());
+                    filter.setName(buscarTextField.getText());
                     controller.search(filter);
 
                 } catch (Exception ex) {
@@ -156,8 +150,8 @@ public class View implements PropertyChangeListener {
                 break;
 
             case Model.FILTER:
-                textField1.setText(model.getFilter().getId());
-                textField1.setText(model.getFilter().getName());
+                buscarTextField.setText(model.getFilter().getId());
+                buscarTextField.setText(model.getFilter().getName());
 
                 break;
         }

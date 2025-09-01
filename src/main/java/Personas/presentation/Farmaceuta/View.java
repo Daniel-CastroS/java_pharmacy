@@ -21,8 +21,8 @@ public class View implements PropertyChangeListener {
     private JTextField textFieldNombre;
     private JTextField textField1;  // campo de búsqueda
     private JButton buscarButton;
-    private JButton reporteButton;
     private JTable table1;
+    private JButton reporteButton;
 
     Controller controller;
     Model model;
