@@ -1,9 +1,7 @@
 package Personas.data;
 
-import Personas.logic.Medico;
-import Personas.logic.Paciente;
-import Personas.logic.Farmaceuta;
-import Personas.logic.Administrador;
+import Personas.logic.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +10,15 @@ public class Data {
     private List<Paciente> pacientes;
     private List<Farmaceuta> farmaceutas;
     private List<Administrador> administradores;
+    private List<Medicamento>  medicamentos;
+
 
     public Data() {
         medicos = new ArrayList<>();
         pacientes = new ArrayList<>();
         administradores = new ArrayList<>();
         farmaceutas = new ArrayList<>();
+        medicamentos = new ArrayList<>();
         administradores.add(new Administrador("111", "Admin1")); // Default admin
 
 
@@ -25,9 +26,11 @@ public class Data {
 
     }
 
+
     public List<Paciente> getPacientes() {
         return pacientes;
     }
+
 
     public List<Medico> getMedicos() {
         return medicos;
@@ -36,6 +39,8 @@ public class Data {
     public List<Farmaceuta> getFarmaceutas() {
         return farmaceutas;
     }
+
+    public List<Medicamento> getMedicamentos() { return medicamentos;}
 
     public List<Administrador> getAdministradores() {
         return administradores;

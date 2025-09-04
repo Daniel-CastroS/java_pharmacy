@@ -40,6 +40,19 @@ public class Application {
         Personas.presentation.Paciente.Model pacienteModel = new Personas.presentation.Paciente.Model();
         Personas.presentation.Paciente.Controller pacienteController = new Personas.presentation.Paciente.Controller(pacienteView, pacienteModel);
 
+
+        //
+        Personas.presentation.Medicamentos.View medicamentosView = new Personas.presentation.Medicamentos.View();
+        Personas.presentation.Medicamentos.Model medicamentosModel = new Personas.presentation.Medicamentos.Model();
+        Personas.presentation.Medicamentos.Controller medicamentosController = new Personas.presentation.Medicamentos.Controller(medicamentosView,medicamentosModel);
+
+
+
+
+
+
+
+
         JFrame windowPaciente = new JFrame("Gestión de Pacientes");
         windowPaciente.setSize(800, 600);
         windowPaciente.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -49,6 +62,7 @@ public class Application {
         tabs.addTab("Médicos", medicoView.getPanel());
         tabs.addTab("Farmaceutas", farmView.getPanel());
         tabs.addTab("Pacientes", pacienteView.getPanel());
+        tabs.addTab("Medicamentos", medicamentosView.getPanel());
 
         window.setContentPane(tabs);
         window.setVisible(true);

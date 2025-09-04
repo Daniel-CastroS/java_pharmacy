@@ -209,4 +209,59 @@ public class Service {
             throw new Exception("Administrador no existe");
         }
     }
+    //=================Medicamentos=====================
+    public void createMedicamento(Medicamento m) throws Exception {
+        Medicamento result = data.getMedicamentos().stream()
+                .filter(i -> i.getCodigo().equals(m.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result == null) {
+            data.getMedicamentos().add(m);
+        } else {
+            throw new Exception("Medicamento ya existe");
+        }
+    }
+
+    public Medicamento readMedicamento(Medicamento m) throws Exception {
+        Medicamento result = data.getMedicamentos().stream()
+                .filter(i -> i.getCodigo().equals(m.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result != null) {
+            return result;
+        } else {
+            throw new Exception("Medicamento no existe");
+        }
+    }
+
+    public void updateMedicamento(Medicamento m) throws Exception {
+        Medicamento result;
+        try {
+            result = this.readMedicamento(m);
+            data.getMedicamentos().remove(result);
+            data.getMedicamentos().add(m);
+        } catch (Exception e) {
+            throw new Exception("Medicamento no existe");
+        }
+    }
+
+    public void deleteMedicamento(Medicamento m) throws Exception {
+        data.getMedicamentos().remove(m);
+    }
+
+    public List<Medicamento> search(Medicamento m) {
+        return data.getMedicamentos().stream()
+                .filter(i -> i.getNombre().contains(m.getNombre()) || i.getCodigo().contains(m.getCodigo()))
+                .sorted(Comparator.comparing(Medicamento::getNombre))
+                .collect(Collectors.toList());
+    }
+    public List<Medicamento> findAllMedicamentos() {
+        return data.getMedicamentos();
+    }
+
+
 }
+
+
+
+
