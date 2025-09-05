@@ -3,8 +3,8 @@ package Personas.logic;
 public class Medico extends Trabajador{
     private String especialidad;
 
-    public Medico(String id, String name, String especialidad) {
-        super(id, name);
+    public Medico(String id, String name, String rol,String especialidad) {
+        super(id, name, rol);
         this.especialidad = especialidad;
     }
     public Medico() {

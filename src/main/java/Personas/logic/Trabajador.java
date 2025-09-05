@@ -3,8 +3,8 @@ package Personas.logic;
 public class Trabajador extends Persona{
     private String clave_sistema;
 
-    public Trabajador(String id, String name) {
-        super(id, name);
+    public Trabajador(String id, String name, String rol) {
+        super(id, name, rol);
         this.clave_sistema = id;
     }
 

@@ -185,30 +185,6 @@ public class Service {
         return data.getFarmaceutas();
     }
 
-    // =============== Administrador ===============
-    public void createAdministrador(Administrador a) throws Exception {
-        Administrador result = data.getAdministradores().stream()
-                .filter(i -> i.getId().equals(a.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result == null) {
-            data.getAdministradores().add(a);
-        } else {
-            throw new Exception("Administrador ya existe");
-        }
-    }
-
-    public Administrador readAdministrador(Persona a) throws Exception {
-        Administrador result = data.getAdministradores().stream()
-                .filter(i -> i.getId().equals(a.getId()))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
-            return result;
-        } else {
-            throw new Exception("Administrador no existe");
-        }
-    }
     //=================Medicamentos=====================
     public void createMedicamento(Medicamento m) throws Exception {
         Medicamento result = data.getMedicamentos().stream()
@@ -259,6 +235,25 @@ public class Service {
         return data.getMedicamentos();
     }
 
+    //=================Public=====================
+
+    public Trabajador read(Trabajador p) throws Exception {
+        Farmaceuta result1 = data.getFarmaceutas().stream()
+                .filter(i -> i.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        Medico result2 = data.getMedicos().stream()
+                .filter(i -> i.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        if (result1 != null) {
+            return result1;
+        } else if (result2 != null) {
+            return result2;
+        } else {
+            throw new Exception("Farmaceuta no existe");
+        }
+    }
 
 }
 

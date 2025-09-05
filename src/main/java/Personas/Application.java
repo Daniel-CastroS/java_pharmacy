@@ -4,7 +4,7 @@ import Personas.logic.Persona;
 import Personas.presentation.Medico.Controller;
 import Personas.presentation.Medico.Model;
 import Personas.presentation.Medico.View;
-
+import Personas.presentation.Sesion.Sesion;
 
 
 import javax.swing.*;
@@ -19,13 +19,31 @@ public class Application {
             ex.printStackTrace();
         }
 
+        doLogin();
+        if(Sesion.isLoggedIn()){
+            doRun();
+        }
 
+    }
+
+    private static void doLogin(){
+        Personas.presentation.Sesion.View loginView = new Personas.presentation.Sesion.View();
+        //loginView.setIconImage((new ImageIcon(Application.class.getResource("/images/login.png"))).getImage());
+        loginView.setTitle("Login");
+        loginView.pack();
+        loginView.setLocationRelativeTo(null);
+        Personas.presentation.Sesion.Model loginModel = new Personas.presentation.Sesion.Model();
+        Personas.presentation.Sesion.Controller loginController = new Personas.presentation.Sesion.Controller(loginView, loginModel);
+        loginView.setVisible(true);
+    }
+
+    private static void doRun(){
         //ESTO ES DE MEDICO
         View medicoView = new View();
         Model medicoModel = new Model();
         Controller medicoController = new Controller(medicoView, medicoModel);
 
-       //ESTO ES DE FARMACEUTA, sin embargo no puedo hacer la implementacion tan directa porque por algun no motivo no me deja hacer el puto import de Farmaceutas
+        //ESTO ES DE FARMACEUTA, sin embargo no puedo hacer la implementacion tan directa porque por algun no motivo no me deja hacer el puto import de Farmaceutas
         Personas.presentation.Farmaceuta.View farmView = new Personas.presentation.Farmaceuta.View();
         Personas.presentation.Farmaceuta.Model farmModel = new Personas.presentation.Farmaceuta.Model();
         Personas.presentation.Farmaceuta.Controller farmController = new Personas.presentation.Farmaceuta.Controller(farmView, farmModel);
@@ -47,12 +65,6 @@ public class Application {
         Personas.presentation.Medicamentos.Controller medicamentosController = new Personas.presentation.Medicamentos.Controller(medicamentosView,medicamentosModel);
 
 
-
-
-
-
-
-
         JFrame windowPaciente = new JFrame("Gestión de Pacientes");
         windowPaciente.setSize(800, 600);
         windowPaciente.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -67,6 +79,7 @@ public class Application {
         window.setContentPane(tabs);
         window.setVisible(true);
     }
+
     public final static int MODE_CREATE=1;
     public final static int MODE_EDIT=2;
 
