@@ -23,7 +23,6 @@ public class Application {
         if(Sesion.isLoggedIn()){
             doRun();
         }
-
     }
 
     private static void doLogin(){
