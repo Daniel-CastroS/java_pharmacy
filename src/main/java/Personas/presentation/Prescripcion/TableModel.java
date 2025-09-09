@@ -1,34 +1,41 @@
 package Personas.presentation.Prescripcion;
 
 import Personas.logic.Medicamento;
+import Personas.logic.Prescripcion;
 import Personas.presentation.AbstractTableModel;
 import java.util.List;
 
-public class TableModel extends AbstractTableModel<Medicamento> implements javax.swing.table.TableModel {
-    public TableModel(int[] cols, List<Medicamento> rows) {
+public class TableModel extends AbstractTableModel<Prescripcion> implements javax.swing.table.TableModel {
+    public TableModel(int[] cols, List<Prescripcion> rows) {
         super(cols, rows);
     }
 
-    public static final int CODIGO = 0;
-    public static final int NOMBRE = 1;
-    public static final int DESCRIPCION = 2;
-
     @Override
-    protected Object getPropetyAt(Medicamento e, int col) {
+    protected Object getPropetyAt(Prescripcion prescripcion, int col) {
         switch (cols[col]) {
-            case CODIGO: return e.getCodigo();
-            case NOMBRE: return e.getNombre();
-            case DESCRIPCION: return e.getPresentacion();
-
+            case NOMBRE: return prescripcion.getMedicamento().getLast().getNombre();
+            case PRESENTACION: return prescripcion.getPresentacion();
+            case CANTIDAD: return prescripcion.getCantidad();
+            case INDICACIONES: return prescripcion.getIndicaciones();
+            case DURACION: return prescripcion.getDuracion();
             default: return "";
         }
     }
 
+    public static final int NOMBRE = 0;
+    public static final int PRESENTACION = 1;
+    public static final int CANTIDAD = 2;
+    public static final int INDICACIONES = 3;
+    public static final int DURACION = 4;
+
+
     @Override
     protected void initColNames() {
-        colNames = new String[3];
-        colNames[CODIGO] = "Codigo";
+        colNames = new String[5];
         colNames[NOMBRE] = "Nombre";
-        colNames[DESCRIPCION] = "Presentacion";
+        colNames[PRESENTACION] = "Presentacion";
+        colNames[CANTIDAD] = "Cantidad";
+        colNames[INDICACIONES] = "Indicaciones";
+        colNames[DURACION] = "Duracion";
     }
 }

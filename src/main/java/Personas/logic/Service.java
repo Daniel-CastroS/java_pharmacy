@@ -38,17 +38,17 @@ public class Service {
         }
     }
 
-   /* public void deleteMedico(String id) throws Exception {
-        Medico result = data.getMedicos().stream()
-                .filter(i -> i.getId().equals(id))
-                .findFirst()
-                .orElse(null);
-        if (result != null) {
-            data.getMedicos().remove(result);
-        } else {
-            throw new Exception("Medico no existe");
-        }
-    }*/
+    /* public void deleteMedico(String id) throws Exception {
+         Medico result = data.getMedicos().stream()
+                 .filter(i -> i.getId().equals(id))
+                 .findFirst()
+                 .orElse(null);
+         if (result != null) {
+             data.getMedicos().remove(result);
+         } else {
+             throw new Exception("Medico no existe");
+         }
+     }*/
     public void updateMedico(Medico m) throws Exception {
         Medico result;
         try{
@@ -91,6 +91,30 @@ public class Service {
     public Paciente readPaciente(Persona p) throws Exception {
         Paciente result = data.getPacientes().stream()
                 .filter(i -> i.getId().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        if (result != null) {
+            return result;
+        } else {
+            throw new Exception("Paciente no existe");
+        }
+    }
+
+    public Paciente readPacienteNombre(Persona p) throws Exception {
+        Paciente result = data.getPacientes().stream()
+                .filter(i -> i.getName().equals(p.getId()))
+                .findFirst()
+                .orElse(null);
+        if (result != null) {
+            return result;
+        } else {
+            throw new Exception("Paciente no existe");
+        }
+    }
+
+    public Paciente readPacienteNombre(Paciente p) throws Exception {
+        Paciente result = data.getPacientes().stream()
+                .filter(i -> i.getName().equals(p.getName()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
@@ -198,9 +222,21 @@ public class Service {
         }
     }
 
-    public Medicamento readMedicamento(Medicamento m) throws Exception {
+    public Medicamento readMedicamentoCodigo(Medicamento m) throws Exception {
         Medicamento result = data.getMedicamentos().stream()
                 .filter(i -> i.getCodigo().equals(m.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result != null) {
+            return result;
+        } else {
+            throw new Exception("Medicamento no existe");
+        }
+    }
+
+    public Medicamento readMedicamentoNombre(Medicamento m) throws Exception {
+        Medicamento result = data.getMedicamentos().stream()
+                .filter(i -> i.getNombre().equals(m.getNombre()))
                 .findFirst()
                 .orElse(null);
         if (result != null) {
@@ -213,7 +249,7 @@ public class Service {
     public void updateMedicamento(Medicamento m) throws Exception {
         Medicamento result;
         try {
-            result = this.readMedicamento(m);
+            result = this.readMedicamentoCodigo(m);
             data.getMedicamentos().remove(result);
             data.getMedicamentos().add(m);
         } catch (Exception e) {
@@ -234,6 +270,59 @@ public class Service {
     public List<Medicamento> findAllMedicamentos() {
         return data.getMedicamentos();
     }
+
+    //=================Prescripciones=====================
+
+    public void createPrescripcion(Prescripcion p) throws Exception {
+        Prescripcion result = data.getPrescripciones().stream()
+                .filter(i -> i.getCodigo().equals(p.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result == null) {
+            data.getPrescripciones().add(p);
+        } else {
+            throw new Exception("Prescripcion ya existe");
+        }
+    }
+
+    public Prescripcion readPrescripcion(Prescripcion p) throws Exception {
+        Prescripcion result = data.getPrescripciones().stream()
+                .filter(i -> i.getCodigo().equals(p.getCodigo()))
+                .findFirst()
+                .orElse(null);
+        if (result != null) {
+            return result;
+        } else {
+            throw new Exception("Prescripcion no existe");
+        }
+    }
+
+    public void updatePrescripcion(Prescripcion m) throws Exception {
+        Prescripcion result;
+        try {
+            result = this.readPrescripcion(m);
+            data.getPrescripciones().remove(result);
+            data.getPrescripciones().add(m);
+        } catch (Exception e) {
+            throw new Exception("Prescripcion no existe");
+        }
+    }
+
+    public void deletePrescripcion(Prescripcion p) throws Exception {
+        data.getPrescripciones().remove(p);
+    }
+
+    public List<Prescripcion> searchPrescripcion(Prescripcion m) {
+        return data.getPrescripciones().stream()
+                .filter(i -> i.getCodigo().contains(m.getCodigo()))
+                .sorted(Comparator.comparing(Prescripcion::getCodigo))
+                .collect(Collectors.toList());
+    }
+
+    public List<Prescripcion> findAllPrescripciones() {
+        return data.getPrescripciones();
+    }
+
 
     //=================Public=====================
 
@@ -256,7 +345,3 @@ public class Service {
     }
 
 }
-
-
-
-

@@ -2,15 +2,16 @@ package Personas.presentation.Prescripcion;
 
 import Personas.Application;
 import Personas.logic.Medicamento;
+import Personas.logic.Prescripcion;
 import Personas.presentation.AbstractModel;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Model extends AbstractModel{
-    private Medicamento current;
-    private List<Medicamento> list;
-    private Medicamento filter;  //ignorar por ahora
+    private Prescripcion current;
+    private List<Prescripcion> list;
+    private Prescripcion filter;  //ignorar por ahora
     int mode;
 
     @Override
@@ -25,33 +26,33 @@ public class Model extends AbstractModel{
 
     }
 
-    public void init(List<Medicamento> list) {
+    public void init(List<Prescripcion> list) {
         this.list = list;
-        this.current = new Medicamento();
-        this.filter = new Medicamento();
+        this.current = new Prescripcion();
+        this.filter = new Prescripcion();
         this.mode = Application.MODE_CREATE;
     }
 
     // GETTERS Y SETTERS
-    public List<Medicamento> getList() { return list; }
+    public List<Prescripcion> getList() { return list; }
 
-    public void setList(List<Medicamento> list) {
+    public void setList(List<Prescripcion> list) {
         this.list = list;
         firePropertyChange(LIST);
     }
 
 
-    public Medicamento getCurrent() { return current; }
+    public Prescripcion getCurrent() { return current; }
 
 
-    public void setCurrent(Medicamento current) {
+    public void setCurrent(Prescripcion current) {
         this.current = current;
         firePropertyChange(CURRENT);
     }
 
-    public Medicamento getFilter() { return filter; }
+    public Prescripcion getFilter() { return filter; }
 
-    public void setFilter(Medicamento filter) {
+    public void setFilter(Prescripcion filter) {
         this.filter = filter;
         firePropertyChange(FILTER);
     }

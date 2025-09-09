@@ -1,9 +1,6 @@
 package Personas.presentation.Prescripcion;
 
-import Personas.logic.Medicamento;
-import Personas.presentation.Medicamentos.Controller;
-import Personas.presentation.Medicamentos.Model;
-import Personas.presentation.Medicamentos.TableModel;
+import Personas.logic.Prescripcion;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
@@ -13,6 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 public class View implements PropertyChangeListener {
     private JButton buscarPacienteButton;
@@ -25,23 +23,36 @@ public class View implements PropertyChangeListener {
     private JButton descartarButton;
     private JButton detallesButton;
     private JPanel panelPrincipal;
-    Personas.presentation.Medicamentos.Controller controller;
-    Personas.presentation.Medicamentos.Model model;
+
+    Controller controller;
+    Model model;
 
     public View() {
         // BOTÓN GUARDAR
         guardarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validateFields()) {
-                    Medicamento m = take();
-                    try {
-                        controller.save(m);
-                        JOptionPane.showMessageDialog(panelPrincipal, "Medicamento registrado", "Info", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(panelPrincipal, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                Prescripcion m = model.getCurrent();
+                try {
+                    controller.save(m);
+                    JOptionPane.showMessageDialog(panelPrincipal, "Prescripcion registrada", "Info", JOptionPane.INFORMATION_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panelPrincipal, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
+            }
+        });
+
+        buscarPacienteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doConseguirPaciente();
+            }
+        });
+
+        agregarMedicamentoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                doConseguirMeds();
             }
         });
 
@@ -49,8 +60,8 @@ public class View implements PropertyChangeListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    controller.deleteMedicamento();
-                    JOptionPane.showMessageDialog(panelPrincipal, "Medicamento eliminado", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    reset();
+                    JOptionPane.showMessageDialog(panelPrincipal, "Prescipcion eliminada", "Info", JOptionPane.INFORMATION_MESSAGE);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panelPrincipal, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
@@ -60,7 +71,11 @@ public class View implements PropertyChangeListener {
         limpiarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                controller.clear();
+                try {
+                    controller.clear();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(panelPrincipal, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
         detallesButton.addActionListener(new ActionListener() {
@@ -87,6 +102,10 @@ public class View implements PropertyChangeListener {
         });
     }
 
+    public void reset() throws Exception {
+        controller.clear();
+    }
+
     // ==== GETTERS & SETTERS ====
     public JPanel getPanel() {
         return panelPrincipal;
@@ -95,8 +114,7 @@ public class View implements PropertyChangeListener {
     public void setController(Controller controller) {
         this.controller = controller;
     }
-
-    public void setModel(Personas.presentation.Medicamentos.Model model) {
+    public void setModel(Model model) {
         this.model = model;
         model.addPropertyChangeListener(this);
     }
@@ -123,5 +141,24 @@ public class View implements PropertyChangeListener {
         }
 
         this.panelPrincipal.revalidate();
+    }
+
+    private static void doConseguirMeds(){
+        Personas.presentation.Prescripcion.medicamento.View medsView = new Personas.presentation.Prescripcion.medicamento.View();
+        medsView.setTitle("Medicamentos");
+        medsView.pack();
+        medsView.setLocationRelativeTo(null);
+        Personas.presentation.Prescripcion.Model loginModel = new Personas.presentation.Prescripcion.Model();
+        Personas.presentation.Prescripcion.Controller loginController = new Personas.presentation.Prescripcion.Controller(medsView, loginModel);
+        medsView.setVisible(true);
+    }
+    private static void doConseguirPaciente(){
+        Personas.presentation.Prescripcion.paciente.View pacienteView = new Personas.presentation.Prescripcion.paciente.View();
+        pacienteView.setTitle("Pacientes");
+        pacienteView.pack();
+        pacienteView.setLocationRelativeTo(null);
+        Personas.presentation.Prescripcion.Model loginModel = new Personas.presentation.Prescripcion.Model();
+        Personas.presentation.Prescripcion.Controller loginController = new Personas.presentation.Prescripcion.Controller(pacienteView, loginModel);
+        pacienteView.setVisible(true);
     }
 }
