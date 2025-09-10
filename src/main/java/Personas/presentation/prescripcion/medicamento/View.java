@@ -1,39 +1,38 @@
-package Personas.presentation.prescripcion.medicamento;
+package Personas.presentation.Prescripcion.medicamento;
 
 import Personas.logic.Medicamento;
-import Personas.presentation.prescripcion.Controller;
-import Personas.presentation.prescripcion.detalle.Detalle;
+import Personas.logic.Service;
+import Personas.presentation.Prescripcion.Controller;
+import Personas.presentation.Prescripcion.Model;
+
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.List;
+import java.beans.PropertyChangeListener;
 
-public class View extends JDialog {
+public class View extends JDialog implements PropertyChangeListener {
     private JPanel contentPane;
-    private JButton buttonAgregar;
-    private JButton buttonCancelar;
-    private JTable tableMedicamentos;
+    private JButton buttonOK;
+    private JButton buttonCancel;
+    private JComboBox comboBox1;
+    private JTextField textField1;
+    private JTextField textFieldBusqueda;
+    private JTable table1;
 
-    private Controller controller;
-    private List<Medicamento> medicamentos;
+    Controller controller;
+    Model model;
 
-    public View(Controller controller, List<Medicamento> medicamentos) {
-        this.controller = controller;
-        this.medicamentos = medicamentos;
-
+    public View() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonAgregar);
+        getRootPane().setDefaultButton(buttonOK);
 
-        // Inicializar tabla
-        initTable();
-
-        buttonAgregar.addActionListener(new ActionListener() {
+        buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                onAgregar();
+                onOK();
             }
         });
 
-        buttonCancelar.addActionListener(new ActionListener() {
+        buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
             }
@@ -55,43 +54,51 @@ public class View extends JDialog {
         }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
     }
 
-    private void initTable() {
-        // Aquí llenas la tabla con tus medicamentos
-        // Por ejemplo, puedes usar un TableModel simple:
-        String[] colNames = {"Código", "Nombre", "Presentación"};
-        Object[][] data = new Object[medicamentos.size()][3];
-        for (int i = 0; i < medicamentos.size(); i++) {
-            Medicamento m = medicamentos.get(i);
-            data[i][0] = m.getCodigo();
-            data[i][1] = m.getNombre();
-            data[i][2] = m.getPresentacion();
-        }
-        tableMedicamentos.setModel(new javax.swing.table.DefaultTableModel(data, colNames));
-        tableMedicamentos.setRowHeight(25);
+    public void propertyChange(java.beans.PropertyChangeEvent evt) {
     }
 
-    private void onAgregar() {
-        int row = tableMedicamentos.getSelectedRow();
-        if (row != -1) {
-            Medicamento seleccionado = medicamentos.get(row);
+    public void setController(Controller controller) {
+        this.controller = controller;
+    }
 
-            // Abrir el MiniView de Detalle
-            Detalle detalleDialog = new Detalle(controller, controller.getModel().getCurrent(), seleccionado);
-            detalleDialog.mostrar();
+    public void setModel(Model model) {
+        this.model = model;
+        model.addPropertyChangeListener(this);
+    }
 
-            // Una vez agregado el detalle, el medicamento recetado ya se incluye en la receta actual
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar un medicamento");
+    private void onOK() {
+        String text = textFieldBusqueda.getText();
+        Medicamento medicamento = new Medicamento();
+        try{
+            if(comboBox1.getSelectedIndex() == 1){
+                medicamento.setCodigo(text);
+                if(Service.instance().readMedicamentoCodigo(medicamento) != null){
+                    medicamento = Service.instance().readMedicamentoCodigo(medicamento);
+                    controller.addMedicamento(medicamento);
+                    dispose();
+                }
+            } else if (comboBox1.getSelectedIndex() == 2) {
+                medicamento.setNombre(text);
+                if(Service.instance().readMedicamentoNombre(medicamento) != null){
+                    medicamento = Service.instance().readMedicamentoNombre(medicamento);
+                    controller.addMedicamento(medicamento);
+                    dispose();
+                }
+            }
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Medicamento no existe");
         }
     }
 
     private void onCancel() {
+        // add your code here if necessary
         dispose();
     }
 
-    public void mostrar() {
-        pack();
-        setVisible(true);
+    public static void main(String[] args) {
+        View dialog = new View();
+        dialog.pack();
+        dialog.setVisible(true);
+        System.exit(0);
     }
 }

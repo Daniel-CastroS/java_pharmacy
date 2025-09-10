@@ -1,127 +1,126 @@
-package Personas.presentation.prescripcion;
+package Personas.presentation.Prescripcion;
 
-import Personas.logic.MedicamentoRecetado;
-import Personas.logic.Receta;
-import Personas.logic.Paciente;
-import Personas.logic.Service;
 import Personas.Application;
-import java.util.List;
-import javax.swing.JOptionPane;
+import Personas.logic.*;
+import Personas.presentation.Prescripcion.Model;
+import Personas.presentation.Prescripcion.View;
+import Personas.presentation.Sesion.Sesion;
 
+import java.util.List;
 
 public class Controller {
-
-    private View view;
-    private Model model;
+    View view;
+    Model model;
 
     public Controller(View view, Model model) {
+        model.init(Service.instance().searchPrescripcion(new Prescripcion()));
         this.view = view;
         this.model = model;
-
-        // Inicializamos el modelo con todas las recetas
-        model.init(Service.instance().findAllRecetas());
-
         view.setController(this);
         view.setModel(model);
     }
 
-    // ====== CRUD RECETA ======
+    // ====== MÉTODOS CRUD ======
 
-    public void search(Receta filter) throws Exception {
+    // Crear paciente
+
+
+    public void search(Prescripcion filter) throws  Exception{
         model.setFilter(filter);
-        model.setMode(Application.MODE_CREATE);
-
-        if (filter.getPaciente() != null) {
-            model.setList(Service.instance().searchRecetaPorPaciente(filter.getPaciente()));
-        } else {
-            model.setList(Service.instance().findAllRecetas());
-        }
+        model.setMode(Personas.Application.MODE_CREATE);
+        model.setCurrent(new Prescripcion());
+        model.setList(Service.instance().searchPrescripcion(model.getFilter()));
     }
-    public void save(Receta r) throws Exception {
-        // asegurar valores por defecto
-        if (r.getFechaRetiro() == null) r.setFechaRetiro(java.time.LocalDate.now().plusDays(3));
-        if (r.getEstado() == null) r.setEstado("Confeccionada");
 
-        // crear copia para guardar y evitar aliasing
-        Receta toSave = new Receta(r.getPaciente());
-        toSave.setFechaRetiro(r.getFechaRetiro());
-        toSave.setEstado(r.getEstado());
 
-        for (MedicamentoRecetado mr : r.getMedicamentos()) {
-            MedicamentoRecetado copy = new MedicamentoRecetado(
-                    mr.getMedicamento(),
-                    mr.getCantidad(),
-                    mr.getIndicaciones(),
-                    mr.getDuracionDias()
-            );
-            toSave.getMedicamentos().add(copy);
+    public void save(Prescripcion m) throws  Exception{
+        switch (model.getMode()) {
+            case Personas.Application.MODE_CREATE:
+                Service.instance().createPrescripcion(m);
+                break;
+            case Personas.Application.MODE_EDIT:
+                Service.instance().updatePrescripcion(m);
+                break;
         }
 
-        // guardar en el service
-        Service.instance().createReceta(toSave);
-
-        // limpiar el current para que la próxima receta empiece en blanco
-        model.setCurrent(new Receta());
-
-        // refrescar listado
-        model.setFilter(new Receta());
+        model.setFilter(new Prescripcion());
         search(model.getFilter());
     }
+    public void edit(int row){
 
+        Prescripcion m = model.getList().get(row);
+        try {
+            model.setMode(Personas.Application.MODE_EDIT);
+            model.setCurrent(Service.instance().readPrescripcion(m));
+        } catch (Exception ex) {}
+    }
 
-
-    public void seleccionarPaciente() {
-        // Obtener todos los pacientes desde el Service
-        List<Paciente> lista = Service.instance().findAllPacientes();
-
-        // Crear el mini view con la lista
-        Personas.presentation.prescripcion.paciente.View mini = new Personas.presentation.prescripcion.paciente.View(lista);
-        mini.setModal(true);
-        mini.pack();
-        mini.setLocationRelativeTo(view.getPanel());
-        mini.setVisible(true);
-
-        // Recuperar el paciente seleccionado del mini view
-        Paciente seleccionado = mini.getSeleccionado();
-        if (seleccionado != null) {
-            setPacienteActual(seleccionado);
-            JOptionPane.showMessageDialog(view.getPanel(), "Paciente seleccionado: " + seleccionado.getName());
+    public void addMedicamento(Medicamento t1) throws Exception {
+        Medicamento meds = Service.instance().readMedicamentoCodigo(t1);
+        if (meds == null) {
+            throw new Exception("Medicamento no existe");
         }
+        model.getCurrent().getMedicamento().add(meds);
     }
 
-
-
-    public void edit(int row) {
-        Receta r = model.getList().get(row);
-        model.setMode(Application.MODE_EDIT);
-        model.setCurrent(r);
+    public void addMedico(Medico t1) throws Exception {
+        Medico m = Service.instance().readMedico(t1);
+        if (m == null) {
+            throw new Exception("Médico no existe");
+        }
+        model.getCurrent().setMedico(m);
     }
 
-    public void delete() throws Exception {
-        Receta r = model.getCurrent();
-        Service.instance().findAllRecetas().remove(r);
-        search(new Receta());
-    }
-
-    public void clear() {
-        model.setMode(Application.MODE_CREATE);
-        model.setCurrent(new Receta());
-    }
-
-    // ====== MÉTODOS ESPECÍFICOS ======
-    public void setPacienteActual(Paciente p) {
+    public void addPaciente(Paciente t1) throws Exception {
+        Paciente p = Service.instance().readPaciente(t1);
+        if (p == null) {
+            throw new Exception("Paciente no existe");
+        }
         model.getCurrent().setPaciente(p);
     }
 
-    public void agregarMedicamento(Receta r, Personas.logic.MedicamentoRecetado mr) {
-        r.getMedicamentos().add(mr);
+    public void deletePrescripcion() throws Exception {
+        Service.instance().deletePrescripcion(model.getCurrent());
+        search(model.getFilter());
     }
 
-    public List<Receta> getAll() {
-        return Service.instance().findAllRecetas();
+    public void deleteMedicamento() throws Exception {
+        if (model.getCurrent().getMedicamento().isEmpty()) {
+            throw new Exception("No hay medicamentos que eliminar");
+        }
+        model.getCurrent().getMedicamento().removeLast();
     }
 
-    public Model getModel() {
-        return model;
+    public void deletePaciente() throws Exception {
+        if (model.getCurrent().getPaciente() == null) {
+            throw new Exception("No hay paciente que eliminar");
+        }
+        model.getCurrent().setPaciente(null);
+    }
+
+    public void deleteMedico() throws Exception {
+        if (model.getCurrent().getMedico() == null) {
+            throw new Exception("No hay médico que eliminar");
+        }
+        model.getCurrent().setMedico(null);
+    }
+
+    // Limpiar formulario (reset current)
+    public void clear() throws  Exception {
+        deleteMedicamento();
+        deletePaciente();
+        deleteMedico();
+        deletePrescripcion();
+        model.setMode(Application.MODE_CREATE);
+        model.setCurrent(new Prescripcion());
+    }
+
+    // Obtener listado completo
+    public List<Prescripcion> getAll() {
+        return Service.instance().findAllPrescripciones();
+    }
+
+    public void shown(){
+        model.setList(Service.instance().searchPrescripcion(new Prescripcion()));
     }
 }

@@ -1,39 +1,41 @@
-package Personas.presentation.prescripcion;
+package Personas.presentation.Prescripcion;
 
-import Personas.logic.Receta;
+import Personas.logic.Medicamento;
+import Personas.logic.Prescripcion;
 import Personas.presentation.AbstractTableModel;
 import java.util.List;
 
-public class TableModel extends AbstractTableModel<Receta> implements javax.swing.table.TableModel {
-
-    public TableModel(int[] cols, List<Receta> rows) {
+public class TableModel extends AbstractTableModel<Prescripcion> implements javax.swing.table.TableModel {
+    public TableModel(int[] cols, List<Prescripcion> rows) {
         super(cols, rows);
     }
 
-    public static final int PACIENTE = 0;
-    public static final int FECHA_RETIRO = 2;
-    public static final int ESTADO = 3;
-    public static final int CANT_MEDICAMENTOS = 4;
-
     @Override
-    protected Object getPropetyAt(Receta r, int col) {
+    protected Object getPropetyAt(Prescripcion prescripcion, int col) {
         switch (cols[col]) {
-            case PACIENTE: return r.getPaciente() != null ? r.getPaciente().getName() : "";
-            case FECHA_RETIRO: return r.getFechaRetiro();
-            case ESTADO: return r.getEstado();
-            case CANT_MEDICAMENTOS: return r.getMedicamentos() != null ? r.getMedicamentos().size() : 0;
+            case NOMBRE: return prescripcion.getMedicamento().getLast().getNombre();
+            case PRESENTACION: return prescripcion.getPresentacion();
+            case CANTIDAD: return prescripcion.getCantidad();
+            case INDICACIONES: return prescripcion.getIndicaciones();
+            case DURACION: return prescripcion.getDuracion();
             default: return "";
         }
     }
 
+    public static final int NOMBRE = 0;
+    public static final int PRESENTACION = 1;
+    public static final int CANTIDAD = 2;
+    public static final int INDICACIONES = 3;
+    public static final int DURACION = 4;
+
+
     @Override
     protected void initColNames() {
         colNames = new String[5];
-
-        colNames[PACIENTE] = "Paciente";
-
-        colNames[FECHA_RETIRO] = "Fecha Retiro";
-        colNames[ESTADO] = "Estado";
-        colNames[CANT_MEDICAMENTOS] = "Cantidad Medicamentos";
+        colNames[NOMBRE] = "Nombre";
+        colNames[PRESENTACION] = "Presentacion";
+        colNames[CANTIDAD] = "Cantidad";
+        colNames[INDICACIONES] = "Indicaciones";
+        colNames[DURACION] = "Duracion";
     }
 }
