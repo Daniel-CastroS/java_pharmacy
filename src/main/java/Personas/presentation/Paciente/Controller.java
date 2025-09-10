@@ -55,29 +55,6 @@ public class Controller {
         } catch (Exception ex) {}
     }
 
-
-
-
-    /*
-    public void createMedico(Medico m) throws Exception {
-        Service.instance().createMedico(m);
-        model.setCurrent(new Medico());
-        model.setList(Service.instance().findAll());
-    }
-    */
-    /*
-    public void readMedico(String id) throws Exception {
-        Medico temp = new Medico();
-        temp.setId(id);
-        try {
-            Medico result = Service.instance().readMedico(temp);
-            model.setCurrent(result);
-        } catch (Exception ex) {
-            model.setCurrent(new Medico());
-            throw ex;
-        }
-    }*/
-
     // Borrar Paciente
     public void deletePaciente() throws Exception {
         Service.instance().deletePaciente(model.getCurrent());

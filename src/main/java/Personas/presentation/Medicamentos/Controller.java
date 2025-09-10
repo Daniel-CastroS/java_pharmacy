@@ -49,7 +49,7 @@ public class Controller {
         Medicamento m = model.getList().get(row);
         try {
             model.setMode(Application.MODE_EDIT);
-            model.setCurrent(Service.instance().readMedicamento(m));
+            model.setCurrent(Service.instance().readMedicamentoCodigo(m));
         } catch (Exception ex) {
             // podrías loguear el error si quieres
         }

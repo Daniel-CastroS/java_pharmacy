@@ -27,8 +27,6 @@ public class Model extends AbstractModel {
         firePropertyChange(LIST);
         firePropertyChange(FILTER);
         firePropertyChange(CURRENT);
-
-
     }
     public Model(){
 
@@ -65,20 +63,6 @@ public Medicamento getFilter() { return filter; }
     public int getMode() { return mode; }
 
     public void setMode(int mode) { this.mode = mode; }
-
-
-
-/// /
-
-
-
-
-
-
-
-
-
-
 
 
 }
