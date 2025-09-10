@@ -69,29 +69,30 @@ public class View extends JDialog implements PropertyChangeListener {
     private void onOK() {
         String text = textFieldBusqueda.getText();
         Medicamento medicamento = new Medicamento();
-        try{
-            if(comboBox1.getSelectedIndex() == 1){
+        try {
+            if (comboBox1.getSelectedIndex() == 1) {
                 medicamento.setCodigo(text);
-                if(Service.instance().readMedicamentoCodigo(medicamento) != null){
+                if (Service.instance().readMedicamentoCodigo(medicamento) != null) {
                     medicamento = Service.instance().readMedicamentoCodigo(medicamento);
                     controller.addMedicamento(medicamento);
+                    model.firePropertyChange(Model.CURRENT); // refrescar vista
                     dispose();
                 }
             } else if (comboBox1.getSelectedIndex() == 2) {
                 medicamento.setNombre(text);
-                if(Service.instance().readMedicamentoNombre(medicamento) != null){
+                if (Service.instance().readMedicamentoNombre(medicamento) != null) {
                     medicamento = Service.instance().readMedicamentoNombre(medicamento);
                     controller.addMedicamento(medicamento);
+                    model.firePropertyChange(Model.CURRENT); // refrescar vista
                     dispose();
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Medicamento no existe");
         }
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 

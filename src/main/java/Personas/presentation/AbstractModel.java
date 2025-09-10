@@ -18,7 +18,7 @@ public abstract class AbstractModel {
         propertyChangeSupport.removePropertyChangeListener(listener);
     }
 
-    protected void firePropertyChange(String propertyName) {
+    public void firePropertyChange(String propertyName) {
         propertyChangeSupport.firePropertyChange(propertyName, null, null);
     }
 }

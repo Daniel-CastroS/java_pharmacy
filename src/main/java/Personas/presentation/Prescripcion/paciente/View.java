@@ -69,29 +69,30 @@ public class View extends JDialog implements PropertyChangeListener {
     private void onOK() {
         String text = textFieldBusqueda.getText();
         Paciente paciente = new Paciente();
-        try{
-            if(comboBox1.getSelectedIndex() == 1){
+        try {
+            if (comboBox1.getSelectedIndex() == 1) {
                 paciente.setId(text);
-                if(Service.instance().readPaciente(paciente) != null){
+                if (Service.instance().readPaciente(paciente) != null) {
                     paciente = Service.instance().readPaciente(paciente);
                     controller.addPaciente(paciente);
+                    model.firePropertyChange(Model.CURRENT); // refrescar vista
                     dispose();
                 }
             } else if (comboBox1.getSelectedIndex() == 2) {
                 paciente.setName(text);
-                if(Service.instance().readPacienteNombre(paciente) != null){
+                if (Service.instance().readPacienteNombre(paciente) != null) {
                     paciente = Service.instance().readPacienteNombre(paciente);
                     controller.addPaciente(paciente);
+                    model.firePropertyChange(Model.CURRENT); // refrescar vista
                     dispose();
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Paciente no existe");
         }
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
     }
 
